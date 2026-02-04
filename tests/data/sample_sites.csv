@@ -1,0 +1,4 @@
+Customer,Site Name,Run Name,Latitude,Longitude,DC Size (MW),AC Installed (MW),AC POI (MW),Racking,Tilt,Azimuth,Ground Clearance Height (m),Panel Model,Bifacial,Inverter Model,Shading (%),DC Wiring Loss (%),AC Wiring Loss (%),Transformer Losses (%),Degradation (%),Availability (%),Module Mismatch (%),LID(%),BESS Dispatch Required,BESS Optimization Required
+Acme Energy,Desert Site,Run A,35.1,-115.2,100,90,85,Fixed,25,180,1.2,Panel X,Yes,Inverter A,1,2,1,0.5,0.5,99,1,1,No,No
+Acme Energy,,Run B,36.0,-116.0,50,45,40,Fixed,20,180,1.0,Panel Y,No,Inverter B,1,2,1,0.5,0.5,99,1,1,No,No
+Beta Power,Coastal Site,Run C,33.9,-118.4,75,70,65,Tracker,10,180,0.8,Panel Z,Yes,Inverter C,1,2,1,0.5,0.5,99,1,1,Yes,No
