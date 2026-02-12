@@ -5,3 +5,7 @@ __pycache__/
 patches/
 # Local patch artifacts (Founder-only workflow)
 patches/
+# pytest cache
+.v/
+v/
+.pytest_cache
