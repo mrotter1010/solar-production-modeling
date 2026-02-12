@@ -1,127 +1,159 @@
-# Milestone <N> — <Short Title>
+Milestone <N> — <Short Title>
 
-## Branching + Handoff (Required)
+============================================================
+EXECUTION MODEL (APPLIES TO ALL BRANCHES)
+============================================================
 
-- Create and work on: `feature/<milestone-slug>`
-- Do **not** commit directly to `develop` or `main`
+Roles
+- Founder (You): owns scope/priorities, owns git-flow locally, applies Codex patch locally, runs final verification, commits/pushes to GitHub.
+- ChatGPT: Technical PM + Staff Engineer; defines milestone brief/architecture; reviews diffs.
+- Codex: Developer; edits only allowed files; produces unified diff patch at handoff; does NOT push to GitHub; does NOT do git-flow; does NOT rewrite history.
 
-Before declaring this milestone complete, Codex must:
-1. Run `scripts/verify.sh` and confirm it exits zero
-2. Commit all changes on the feature branch
-3. Push the feature branch to `origin`
-4. Report:
-   - branch name
-   - latest commit SHA(s)
+Operating constraints (Codex sandbox)
+- No GitHub network access
+- Cannot delete .git
+- Cannot hard reset branches
+- Cannot rewrite history
+Therefore:
+- Codex edits in place and hands off via “git diff” patch only.
+- Local repo is the only canonical git history.
 
-Screenshots or UI-only diffs are **not** acceptable as a handoff.
+============================================================
+GIT-FLOW DISCIPLINE
+============================================================
 
----
+All official branching + merging happens locally via git-flow (Founder only).
 
-## Objective
+Start Milestone (Founder runs locally)
+- git checkout develop
+- git pull origin develop
+- git flow feature start <milestone-slug>
+- git push -u origin feature/<milestone-slug>
 
-Describe the **single, concrete outcome** this milestone must deliver.
-Focus on capability, not implementation details.
+Complete Milestone (Founder runs locally)
+- save Codex diff as <milestone-output.patch>
+- git apply --3way <milestone-output.patch>
+- scripts/verify.sh
+- git add -A
+- git commit -m "Milestone <N>: <Short Title>"
+- git push
+- git flow feature finish <milestone-slug>
+- git push origin develop
 
-Example:
-> Enable batch processing of site inputs and deterministic output generation.
+Codex must NOT
+- create or finish git-flow branches
+- push to GitHub
+- merge branches
+- provide commit SHAs as a handoff artifact
 
----
+============================================================
+REQUIRED ACK CHECKPOINTS (CODEX MUST FOLLOW)
+============================================================
 
-## Scope (In)
+ACK 1 — Preflight (before any code changes)
+Codex runs:
+- ls -la
+- git status -sb
+- git diff --name-only
+Codex replies exactly:
+ACK — Preflight complete. Ready for milestone brief.
 
-Explicitly list what **is included** in this milestone.
+ACK 2 — Scope Lock (after receiving milestone brief)
+Codex replies exactly:
+ACK — Scope understood. Implementing only allowed files and respecting out-of-scope constraints.
 
-- Bullet points only
-- Be precise
-- Assume Codex will implement *exactly* what is written here
+ACK 3 — Handoff Complete (end of milestone)
+Codex must provide, in order:
+1) scripts/verify.sh output summary (must exit 0)
+2) git diff --name-only
+3) git status -sb
+4) FULL unified diff (git diff output pasted in chat)
+Codex ends exactly:
+ACK — Milestone implementation complete. Patch provided.
 
----
+Handoff format rules
+- The ONLY accepted handoff artifact is the full unified diff (git diff output).
+- No screenshots. No partial diffs. No summaries in place of the diff.
 
-## Out of Scope
+============================================================
+OBJECTIVE
+============================================================
 
-Explicitly list what **must not** be implemented in this milestone.
+<Describe the single concrete outcome this milestone must deliver.>
 
-- This section is mandatory
-- Use it to prevent scope creep
-- If something is “later,” say so
+============================================================
+SCOPE (IN)
+============================================================
 
----
+- <bullet>
+- <bullet>
 
-## Inputs
+============================================================
+OUT OF SCOPE
+============================================================
 
-Describe required inputs, formats, or assumptions.
+- <bullet>
+- <bullet>
 
-- File formats
-- Required columns or fields
-- Expected conventions
+============================================================
+INPUTS
+============================================================
 
-If no new inputs are introduced, say so explicitly.
+- <input description>
+- <formats / required fields / assumptions>
+- If no new inputs: “No new inputs introduced.”
 
----
+============================================================
+OUTPUTS
+============================================================
 
-## Outputs
+- <output description>
+- <directory layout / filenames>
+- Runtime outputs (e.g., under data/) must not be committed unless explicitly approved.
 
-Describe required outputs and structure.
+============================================================
+FILES TO CREATE OR MODIFY (ALLOWLIST)
+============================================================
 
-- Directory layout
-- File naming conventions
-- Required artifacts for traceability or reproducibility
+Codex may ONLY create/modify the following paths/files:
+- <path or file>
+- <path or file>
 
----
+Anything not listed here must not be changed. If additional files are required, Codex must stop and request approval.
 
-## Files to Create or Modify
+============================================================
+ACCEPTANCE CRITERIA
+============================================================
 
-Explicit list of files Codex is allowed to touch.
+All must be true:
+- <deterministic statement>
+- <deterministic statement>
+- scripts/verify.sh exits 0
+- no forbidden files modified
 
-- New files
-- Existing files that may be modified
+============================================================
+VERIFICATION REQUIREMENTS
+============================================================
 
-Anything not listed here must not be changed.
+- Required unit tests: <list>
+- Required smoke checks: <list>
+- Required commands beyond scripts/verify.sh: <list or “None”>
+Final authority is local verification on Founder machine.
 
----
+============================================================
+NOTES / OPEN QUESTIONS
+============================================================
 
-## Acceptance Criteria
+None.
+(or list items)
 
-Verifiable conditions that must all be true for approval.
+============================================================
+APPROVAL GATE
+============================================================
 
-- Deterministic, testable statements
-- Prefer filesystem assertions and command exit codes
-- Avoid subjective language
-
-Example:
-- `scripts/verify.sh` exits zero
-- All required outputs are created
-- Errors are isolated to site level
-- Tests pass
-
----
-
-## Verification Requirements
-
-How correctness is proven.
-
-- Required tests
-- Required smoke checks
-- Required commands (if any beyond `scripts/verify.sh`)
-
-If nothing beyond `scripts/verify.sh` is required, state that explicitly.
-
----
-
-## Notes / Open Questions
-
-Anything that:
-- requires clarification
-- represents a known tradeoff
-- is intentionally deferred
-
-If empty, write: `None`.
-
----
-
-## Approval Gate
-
-This milestone is considered complete **only after**:
-- Acceptance criteria are met
-- Handoff requirements are satisfied
-- Changes are reviewed and approved by ChatGPT
+Milestone is complete only after:
+- acceptance criteria are met
+- patch-based handoff is provided (full git diff)
+- local verification passes
+- changes are reviewed/approved by ChatGPT
+- feature branch is finished via git-flow
